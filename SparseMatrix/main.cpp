@@ -11,14 +11,10 @@
 #include <exception>
 #include <stdexcept>
 
-<<<<<<< HEAD
 /**
  SparseMatrix
 
  */
-=======
-
->>>>>>> 08f1dde64bbfc34294d002ac0753f837d966db56
 template <typename T>
 class SparseMatrix {
 
