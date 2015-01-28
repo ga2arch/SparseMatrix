@@ -13,7 +13,8 @@
 
 /**
  SparseMatrix
-
+ Implementation of a SparseMatrix
+ @param T the type to store in the matrix.
  */
 template <typename T>
 class SparseMatrix {
