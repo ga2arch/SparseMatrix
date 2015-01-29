@@ -20,6 +20,12 @@ template <typename T>
 class SparseMatrix {
 
 public:
+    /**
+     Struct to hold the elements with their respective coordinates.
+     @param j the row coordinate
+     @param k the coloumn cooridnate
+     @param elem the element stored
+     */
     struct Element {
         const int j, k;
         T elem;
