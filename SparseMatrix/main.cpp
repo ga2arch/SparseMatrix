@@ -223,6 +223,13 @@ public:
         const_iterator(Element** data_): data(data_) {}
     };
 
+    /**
+     Constructor
+     @param r the number of rows
+     @param c the number of coloumns
+     @param d the default element to return when the user tries to retrieve an 
+     element not existent in the matrix.
+     */
     explicit SparseMatrix(int r, int c, T d): rows(r), cols(c), def(d), size(0), m(NULL) {}
     
     SparseMatrix(const SparseMatrix& sm) {
