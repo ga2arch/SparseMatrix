@@ -232,6 +232,10 @@ public:
      */
     explicit SparseMatrix(int r, int c, T d): rows(r), cols(c), def(d), size(0), m(NULL) {}
     
+    /**
+     Copy constructor
+     @param sm the matrix to copy from
+     */
     SparseMatrix(const SparseMatrix& sm) {
         rows = sm.rows;
         cols = sm.cols;
