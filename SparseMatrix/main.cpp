@@ -250,6 +250,10 @@ public:
         }
     }
     
+    /**
+     Copy constructor from Matrix with different type trying to cast the type.
+     @param sm the other matrix
+     */
     template <typename Q>
     SparseMatrix(const SparseMatrix<Q>& sm) {
         rows = sm.get_rows();
