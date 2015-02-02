@@ -11,7 +11,10 @@
 #include <exception>
 #include <stdexcept>
 
+/**
+ SparseMatrix
 
+ */
 template <typename T>
 class SparseMatrix {
 
