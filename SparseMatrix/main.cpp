@@ -271,6 +271,9 @@ public:
         }
     }
     
+    /**
+     Destructor
+     */
     ~SparseMatrix() {
         for (int i=0; i < size; i++)
             delete m[i];
@@ -295,6 +298,12 @@ public:
         return iterator(m+size);
     }
     
+    /**
+     Add an element of type T to the matrix.
+     @param j the nth-row
+     @param k the nth-col
+     @param elem the element to add to the matrix
+     */
     void add(int j, int k, const T elem) {
         //assert(j < rows && k < cols);
         
@@ -318,12 +327,12 @@ public:
                 }
                 
                 if (j == m[i]->j && k == m[i]->k) {
-                    m[i] = new Element(j, k, elem);
-                    size--;
+                    m[i]->elem = elem;
                     
                     delete[] temp;
                     temp = NULL;
                     
+                    --size;
                     break;
                 }
                 
