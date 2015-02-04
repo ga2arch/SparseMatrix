@@ -346,6 +346,14 @@ public:
         if (temp) m = temp;
     }
     
+    /**
+     Query operator, useful to retrieve elements aded to the matrix, returns 
+     the default element passed at class intialization if queried for an element
+     not in the matrix.
+     @param j the nth-row
+     @param k the nth-col
+     @returns the element
+     */
     T operator()(int j, int k) {
         for (int i=0; i < size; i++) {
             if (m[i]->j == j && m[i]->k == k)
