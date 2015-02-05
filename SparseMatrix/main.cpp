@@ -363,6 +363,10 @@ public:
         return def;
     }
     
+    /**
+     Returns the default parameter passed at class instantiation
+     @returns default value
+     */
     const T get_def() const {
         return def;
     }
