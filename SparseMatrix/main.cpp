@@ -371,6 +371,10 @@ public:
         return def;
     }
     
+    /**
+     Returns the number of rows.
+     @returns number of rows
+     */
     const int get_rows() const {
         return rows;
     }
