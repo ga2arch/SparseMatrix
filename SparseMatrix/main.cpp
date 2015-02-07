@@ -379,6 +379,10 @@ public:
         return rows;
     }
     
+    /**
+     Returns the number of cols
+     @returns number of cols
+     */
     const int get_cols() const {
         return cols;
     }
