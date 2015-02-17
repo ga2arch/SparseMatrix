@@ -497,11 +497,92 @@ void test_evaluate_simple() {
     std::cout << "PASSED" << std::endl;
 }
 
+void test_add_complex() {
+    std::cout << "ADD: ";
+    
+    SparseMatrix<std::string> m(10, 10, "");
+    m.add(0, 1, "ciao");
+    m.add(9, 9, "come");
+    m.add(3, 2, "va");
+    
+    std::string t[4] = { "ciao", "va", "come" };
+    
+    int i = 0;
+    for (SparseMatrix<std::string>::const_iterator itr=m.begin(); itr != m.end(); itr++) {
+        assert(itr->elem == t[i++]);
+    }
+    
+    std::cout << "PASSED" << std::endl;
+}
+
+void test_overwrite_complex() {
+    std::cout << "OVERWRITE: ";
+    
+    SparseMatrix<std::string> m(10, 10, "");
+    m.add(0, 1, "ciao");
+    m.add(9, 9, "come");
+    m.add(3, 2, "va");
+    m.add(9, 9, "test");
+
+    std::string t[4] = { "ciao", "va", "test" };
+    
+    int i = 0;
+    for (SparseMatrix<std::string>::const_iterator itr=m.begin(); itr != m.end(); itr++) {
+        assert(itr->elem == t[i++]);
+    }
+    
+    std::cout << "PASSED" << std::endl;
+}
+
+void test_get_complex() {
+    std::cout << "GET: ";
+    
+    SparseMatrix<std::string> m(10, 10, "");
+    m.add(0, 1, "ciao");
+    m.add(9, 9, "come");
+    m.add(3, 2, "va");
+    m.add(9, 9, "test");
+    m.add(3, 5, "");
+    
+    assert(m(9, 9) == "test");
+    assert(m(3, 5) == m.get_def());
+    
+    std::cout << "PASSED" << std::endl;
+}
+
+bool p_complex(const std::string& x) {
+    return x == "ciao";
+}
+
+void test_evaluate_complex() {
+    std::cout << "EVALUATE: ";
+    
+    SparseMatrix<std::string> m(10, 10, "");
+    m.add(0, 1, "ciao");
+    m.add(9, 9, "come");
+    m.add(3, 2, "va");
+    m.add(9, 9, "test");
+    m.add(3, 5, "");
+    
+    int sum = evaluate(m, p_complex);
+    
+    assert(sum == 1);
+    
+    std::cout << "PASSED" << std::endl;
+}
+
 int main(int argc, const char * argv[]) {
+    std::cout << "=== TESTING PRIMITE TYPE: ===\n";
     test_add_simple();
     test_overwrite_simple();
     test_get_simple();
     test_evaluate_simple();
+    
+    std::cout << "\n=== TESTING COMPLEX TYPE: ===\n";
+    test_add_complex();
+    test_overwrite_complex();
+    test_get_complex();
+    test_evaluate_complex();
     
     return 0;
 }
