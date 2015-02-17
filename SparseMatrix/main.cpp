@@ -11,6 +11,7 @@
 #include <exception>
 #include <stdexcept>
 #include <cassert>
+#include <cstddef>
 
 /**
  SparseMatrix
@@ -214,8 +215,6 @@ public:
             return data != other.data;
         }
         
-        friend class const_iterator;
- 
     private:
         element** data;
         
