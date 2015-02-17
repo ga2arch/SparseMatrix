@@ -355,7 +355,7 @@ public:
      @param k the nth-col
      @returns the element
      */
-    T operator()(int j, int k) {
+    T operator()(int j, int k) const {
         for (int i=0; i < size; i++) {
             if (m[i]->j == j && m[i]->k == k)
                 return m[i]->elem;
@@ -397,6 +397,27 @@ public:
     }
     
 private:
+    /**
+     Comodity function to easily display the content of a SparseMatrix.
+     @param os stream to write on
+     @param sm reference of the matrix to write
+     @return output stream
+     */
+    friend std::ostream& operator<<(std::ostream &os, const SparseMatrix &sm) {
+        for (int j=0; j < sm.get_rows(); j++) {
+            for (int k=0; k < sm.get_cols(); k++) {
+                os << sm(j, k);
+                
+                if (k == sm.get_cols()-1)
+                    os << "\n";
+                else
+                    os << " ";
+            }
+        }
+        
+        return os;
+    }
+    
     int rows;
     int cols;
     T def;
@@ -571,6 +592,22 @@ void test_evaluate_complex() {
     std::cout << "PASSED" << std::endl;
 }
 
+void test_pretty_print() {
+    SparseMatrix<int> m(3, 3, 0);
+    m.add(0, 0, 3);
+    m.add(0, 1, 2);
+    m.add(0, 2, 5);
+    
+    m.add(1, 0, 6);
+    m.add(1, 2, 10);
+    
+    m.add(2, 0, 32);
+    m.add(2, 1, 47);
+    m.add(2, 2, 50);
+    
+    std::cout << m << std::endl;;
+}
+
 int main(int argc, const char * argv[]) {
     std::cout << "=== TESTING PRIMITE TYPE: ===\n";
     test_add_simple();
@@ -583,6 +620,9 @@ int main(int argc, const char * argv[]) {
     test_overwrite_complex();
     test_get_complex();
     test_evaluate_complex();
+    
+    std::cout << "\n=== TESTING PRETY PRINTING: ===\n";
+    test_pretty_print();
     
     return 0;
 }
