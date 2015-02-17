@@ -347,11 +347,19 @@ public:
         else
             temp[0] = new element(j, k, elem);
         
-        if (temp) m = temp;
+        if (temp) {
+            
+            for (int i=0; i < size-1; i++)
+                delete m[i];
+            
+            delete[] m;
+            
+            m = temp;
+        }
     }
     
     /**
-     Query operator, useful to retrieve elements aded to the matrix, returns 
+     Query operator, useful to retrieve elements aded to the matrix, returns
      the default element passed at class intialization if queried for an element
      not in the matrix.
      @param j the nth-row
