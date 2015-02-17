@@ -282,18 +282,36 @@ public:
         m = NULL;
     }
     
+    
+    /**
+     Return the const_iterator, pointing at the first element
+     @returns the const_iterator
+     */
     iterator begin() {
         return iterator(m);
     }
     
+    /**
+     Return the iterator, pointing at the last element
+     @returns the iterator
+     */
     iterator end() {
         return iterator(m+size);
     }
     
+    
+    /**
+     Return the iterator, pointing at the first element
+     @returns the const_iterator
+     */
     const_iterator begin() const {
         return iterator(m);
     }
     
+    /**
+     Return the const_iterator, pointing at the last element
+     @returns the const_iterator
+     */
     const_iterator end() const {
         return iterator(m+size);
     }
@@ -305,7 +323,9 @@ public:
      @param elem the element to add to the matrix
      */
     void add(int j, int k, const T elem) {
-        //assert(j < rows && k < cols);
+        if (j >= rows || k >= cols) {
+            throw std::out_of_range("Element j/k are out of range");
+        }
         
         element** temp = new element*[++size]();
         
