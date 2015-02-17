@@ -171,6 +171,36 @@ void test_pretty_print() {
     std::cout << m << std::endl;;
 }
 
+void test_conversion_primite_to_primitve() {
+    std::cout << "INT -> FLOAT: ";
+    
+    SparseMatrix<float> m(1, 2, 1.3);
+    m.add(0, 0, 3.2);
+    m.add(0, 1, 2.4);
+
+    SparseMatrix<int> m1(m);
+
+    assert(m1(0, 0) == (int)3);
+    assert(m1(0, 1) == (int)2);
+    
+    std::cout << "PASSED" << std::endl;
+}
+
+void test_conversion_primite_to_complex() {
+    std::cout << "CHAR -> STRING: ";
+    
+    SparseMatrix<char*> m(1, 2, "ciao");
+    m.add(0, 0, "hello");
+    m.add(0, 1, "come");
+    
+    SparseMatrix<std::string> m1(m);
+    
+    assert(m1(0, 0) == std::string("hello"));
+    assert(m1(0, 1) == std::string("come"));
+    
+    std::cout << "PASSED" << std::endl;
+}
+
 int main(int argc, const char * argv[]) {
     std::cout << "=== TESTING PRIMITE TYPE: ===\n";
     test_add_simple();
@@ -183,6 +213,10 @@ int main(int argc, const char * argv[]) {
     test_overwrite_complex();
     test_get_complex();
     test_evaluate_complex();
+    
+    std::cout << "\n=== TESTING CONVERSION: ===\n";
+    test_conversion_primite_to_primitve();
+    test_conversion_primite_to_complex();
     
     std::cout << "\n=== TESTING PRETTY PRINTING: ===\n";
     test_pretty_print();
