@@ -425,8 +425,6 @@ int evaluate(SparseMatrix<T>& sm, P p) {
     return sum;
 }
 
-bool p(int m) { return m > 1; }
-
 void test_add_simple() {
     std::cout << "ADD: ";
     
@@ -464,9 +462,46 @@ void test_overwrite_simple() {
     std::cout << "PASSED" << std::endl;
 }
 
+void test_get_simple() {
+    std::cout << "GET: ";
+    
+    SparseMatrix<float> m(10, 10, 0);
+    m.add(0, 1, 1.2);
+    m.add(9, 9, 0);
+    m.add(3, 2, 5.3);
+    m.add(9, 9, 1.3);
+    
+    assert(m(9, 9) == (float)1.3);
+    assert(m(3, 5) == (float)m.get_def());
+
+    std::cout << "PASSED" << std::endl;
+}
+
+bool p(float x) {
+    return x > 1;
+}
+
+void test_evaluate_simple() {
+    std::cout << "EVALUATE: ";
+    
+    SparseMatrix<float> m(10, 10, 0);
+    m.add(0, 1, 1.2);
+    m.add(9, 9, 0);
+    m.add(3, 2, 5.3);
+    m.add(9, 9, 1.3);
+    
+    int sum = evaluate(m, p);
+    
+    assert(sum == 3);
+    
+    std::cout << "PASSED" << std::endl;
+}
+
 int main(int argc, const char * argv[]) {
     test_add_simple();
     test_overwrite_simple();
+    test_get_simple();
+    test_evaluate_simple();
     
     return 0;
 }
