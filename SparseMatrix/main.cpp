@@ -320,7 +320,8 @@ public:
                     temp[i] = new element(j, k, elem);
                     
                     for (int x=i+1; x < size; x++) {
-                        temp[x] = m[i++];
+                        temp[x] = new element(m[i]->j, m[i]->k, m[i]->elem);
+                        i++;
                     }
                     
                     break;
@@ -329,6 +330,9 @@ public:
                 if (j == m[i]->j && k == m[i]->k) {
                     m[i]->elem = elem;
                     
+                    for (int i=0; i < size; i++)
+                        delete temp[i];
+                    
                     delete[] temp;
                     temp = NULL;
                     
@@ -336,7 +340,7 @@ public:
                     break;
                 }
                 
-                temp[i] = m[i];
+                temp[i] = new element(m[i]->j, m[i]->k, m[i]->elem);
             }
             
         }
