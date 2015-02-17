@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <exception>
 #include <stdexcept>
+#include <cassert>
 
 /**
  SparseMatrix
@@ -26,11 +27,11 @@ public:
      @param k the coloumn cooridnate
      @param elem the element stored
      */
-    struct Element {
+    struct element {
         const int j, k;
         T elem;
         
-        Element(int r, int c, const T e): j(r), k(c), elem(e) {}
+        element(int r, int c, const T e): j(r), k(c), elem(e) {}
     };
     
     class const_iterator;
@@ -39,7 +40,7 @@ public:
         //
     public:
         typedef std::forward_iterator_tag iterator_category;
-        typedef Element                   value_type;
+        typedef element                   value_type;
         typedef ptrdiff_t                 difference_type;
         typedef value_type*               pointer;
         typedef value_type*&              reference;
@@ -131,18 +132,18 @@ public:
 
         
     private:
-        Element** data;
+        element** data;
         
         friend class SparseMatrix;
         
-        explicit iterator(Element** data_): data(data_) {}
+        explicit iterator(element** data_): data(data_) {}
     };
     
     class const_iterator {
         //
     public:
         typedef std::forward_iterator_tag iterator_category;
-        typedef const Element             value_type;
+        typedef const element             value_type;
         typedef ptrdiff_t                 difference_type;
         typedef value_type*               pointer;
         typedef value_type&               reference;
@@ -216,11 +217,11 @@ public:
         friend class const_iterator;
  
     private:
-        Element** data;
+        element** data;
         
         friend class SparseMatrix;
         
-        const_iterator(Element** data_): data(data_) {}
+        const_iterator(element** data_): data(data_) {}
     };
 
     /**
@@ -243,10 +244,10 @@ public:
         def  = sm.def;
         size = sm.size;
         
-        m = new Element*[size]();
+        m = new element*[size]();
         
         for (int i=0; i < size; i++) {
-            m[i] = new Element(sm.m[i]->j, sm.m[i]->k, sm.m[i]->elem);
+            m[i] = new element(sm.m[i]->j, sm.m[i]->k, sm.m[i]->elem);
         }
     }
     
@@ -262,10 +263,10 @@ public:
         def  = sm.get_def();
         size = sm.get_size();
         
-        m = new Element*[size]();
+        m = new element*[size]();
         
         for (int i=0; i < size; i++) {
-            m[i] = new Element(sm.get_m()[i]->j,
+            m[i] = new element(sm.get_m()[i]->j,
                                sm.get_m()[i]->k,
                                sm.get_m()[i]->elem);
         }
@@ -307,17 +308,17 @@ public:
     void add(int j, int k, const T elem) {
         //assert(j < rows && k < cols);
         
-        Element** temp = new Element*[++size]();
+        element** temp = new element*[++size]();
         
         if (m) {
             for (int i=0; i < size; i++) {
                 if (i == size-1) {
-                    temp[i] = new Element(j, k, elem);
+                    temp[i] = new element(j, k, elem);
                     break;
                 }
                 
                 if ((j < m[i]->j) || (j == m[i]->j && k < m[i]->k)) {
-                    temp[i] = new Element(j, k, elem);
+                    temp[i] = new element(j, k, elem);
                     
                     for (int x=i+1; x < size; x++) {
                         temp[x] = m[i++];
@@ -341,7 +342,7 @@ public:
             
         }
         else
-            temp[0] = new Element(j, k, elem);
+            temp[0] = new element(j, k, elem);
         
         if (temp) m = temp;
     }
@@ -391,7 +392,7 @@ public:
         return size;
     }
     
-    Element** get_m() const  {
+    element** get_m() const  {
         return m;
     }
     
@@ -400,15 +401,23 @@ private:
     int cols;
     T def;
     
-    Element** m;
+    element** m;
     size_t size;
 };
 
+/**
+ Takes a sparsematrix and a function p and return the number of elements that 
+ satisfie the function p.
+ @param sm the SparseMatrix
+ @param p  the predicated
+ @returns the number of elements
+ */
 template <typename T, typename P>
 int evaluate(SparseMatrix<T>& sm, P p) {
     int sum = 0;
-    for (const typename SparseMatrix<T>::Element* e: sm) {
-        if (p(e->elem)) sum++;
+
+    for (typename SparseMatrix<T>::const_iterator itr=sm.begin(); itr != sm.end(); itr++) {
+        if (p(itr->elem)) sum++;
     }
     
     if (p(sm.get_def())) sum++;
@@ -416,22 +425,48 @@ int evaluate(SparseMatrix<T>& sm, P p) {
     return sum;
 }
 
-bool t(int m) { return m > 1; }
+bool p(int m) { return m > 1; }
 
-int main(int argc, const char * argv[]) {
+void test_add_simple() {
+    std::cout << "ADD: ";
+    
     SparseMatrix<float> m(10, 10, 0);
     m.add(0, 1, 1.2);
     m.add(9, 9, 0);
-    m.add(3, 2, 9);
     m.add(3, 2, 5.3);
     
-    SparseMatrix<int> m2(m);
+    float t[4] = { 1.2, 5.3, 0 };
     
-    for (auto itr=m.begin(); itr != m.end(); itr++) {
-        std::cout << itr->elem << std::endl;
+    int i = 0;
+    for (SparseMatrix<float>::const_iterator itr=m.begin(); itr != m.end(); itr++) {
+        assert(itr->elem == t[i++]);
     }
     
-    std::cout << evaluate(m, t);
+    std::cout << "PASSED" << std::endl;
+}
+
+void test_overwrite_simple() {
+    std::cout << "OVERWRITE: ";
+    
+    SparseMatrix<float> m(10, 10, 0);
+    m.add(0, 1, 1.2);
+    m.add(9, 9, 0);
+    m.add(3, 2, 5.3);
+    m.add(9, 9, 1.3);
+
+    float t[4] = { 1.2, 5.3, 1.3 };
+    
+    int i = 0;
+    for (SparseMatrix<float>::const_iterator itr=m.begin(); itr != m.end(); itr++) {
+        assert(itr->elem == t[i++]);
+    }
+    
+    std::cout << "PASSED" << std::endl;
+}
+
+int main(int argc, const char * argv[]) {
+    test_add_simple();
+    test_overwrite_simple();
     
     return 0;
 }
