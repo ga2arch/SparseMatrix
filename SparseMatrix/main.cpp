@@ -9,7 +9,7 @@
 
 #include "SparseMatrix.h"
 
-void test_add_simple() {
+void test_add_primitive() {
     std::cout << "ADD: ";
     
     SparseMatrix<float> m(10, 10, 0);
@@ -27,7 +27,7 @@ void test_add_simple() {
     std::cout << "PASSED" << std::endl;
 }
 
-void test_overwrite_simple() {
+void test_overwrite_primitive() {
     std::cout << "OVERWRITE: ";
     
     SparseMatrix<float> m(10, 10, 0);
@@ -46,7 +46,7 @@ void test_overwrite_simple() {
     std::cout << "PASSED" << std::endl;
 }
 
-void test_get_simple() {
+void test_get_primitive() {
     std::cout << "GET: ";
     
     SparseMatrix<float> m(10, 10, 0);
@@ -61,12 +61,12 @@ void test_get_simple() {
     std::cout << "PASSED" << std::endl;
 }
 
-bool p(float x) {
+bool p_primitive(float x) {
     return x > 1;
 }
 
-void test_evaluate_simple() {
-    std::cout << "EVALUATE: ";
+void test_evaluate_primitive() {
+    std::cout << "EVALUATE PRIMITIVE: ";
     
     SparseMatrix<float> m(10, 10, 0);
     m.add(0, 1, 1.2);
@@ -74,7 +74,7 @@ void test_evaluate_simple() {
     m.add(3, 2, 5.3);
     m.add(9, 9, 1.3);
     
-    int sum = evaluate(m, p);
+    int sum = evaluate(m, p_primitive);
     
     assert(sum == 3);
     
@@ -139,7 +139,7 @@ bool p_complex(const std::string& x) {
 }
 
 void test_evaluate_complex() {
-    std::cout << "EVALUATE: ";
+    std::cout << "EVALUATE COMPLEX: ";
     
     SparseMatrix<std::string> m(10, 10, "");
     m.add(0, 1, "ciao");
@@ -155,7 +155,7 @@ void test_evaluate_complex() {
     std::cout << "PASSED" << std::endl;
 }
 
-void test_pretty_print() {
+void test_pretty_print_primitive() {
     SparseMatrix<int> m(3, 3, 0);
     m.add(0, 0, 3);
     m.add(0, 1, 2);
@@ -167,6 +167,22 @@ void test_pretty_print() {
     m.add(2, 0, 32);
     m.add(2, 1, 47);
     m.add(2, 2, 50);
+    
+    std::cout << m << std::endl;;
+}
+
+void test_pretty_print_complex() {
+    SparseMatrix<std::string> m(3, 3, "-");
+    m.add(0, 0, "+");
+    m.add(0, 1, "*");
+    m.add(0, 2, "ù");
+    
+    m.add(1, 0, "=");
+    m.add(1, 2, "^");
+    
+    m.add(2, 0, "?");
+    m.add(2, 1, "'");
+    m.add(2, 2, ";");
     
     std::cout << m << std::endl;;
 }
@@ -203,15 +219,17 @@ void test_conversion_primite_to_complex() {
 
 int main(int argc, const char * argv[]) {
     std::cout << "=== TESTING PRIMITE TYPE: ===\n";
-    test_add_simple();
-    test_overwrite_simple();
-    test_get_simple();
-    test_evaluate_simple();
+    test_add_primitive();
+    test_overwrite_primitive();
+    test_get_primitive();
     
     std::cout << "\n=== TESTING COMPLEX TYPE: ===\n";
     test_add_complex();
     test_overwrite_complex();
     test_get_complex();
+    
+    std::cout << "\n=== TESTING EVALUATE: ===\n";
+    test_evaluate_primitive();
     test_evaluate_complex();
     
     std::cout << "\n=== TESTING CONVERSION: ===\n";
@@ -219,7 +237,8 @@ int main(int argc, const char * argv[]) {
     test_conversion_primite_to_complex();
     
     std::cout << "\n=== TESTING PRETTY PRINTING: ===\n";
-    test_pretty_print();
+    test_pretty_print_primitive();
+    test_pretty_print_complex();
     
     return 0;
 }
