@@ -266,10 +266,12 @@ public:
         
         m = new element*[size]();
         
+        typename SparseMatrix<Q>::element* const* sm_m = sm.get_m();
+        
         for (int i=0; i < size; i++) {
-            m[i] = new element(sm.get_m()[i]->j,
-                               sm.get_m()[i]->k,
-                               sm.get_m()[i]->elem);
+            m[i] = new element(sm_m[i]->j,
+                               sm_m[i]->k,
+                               sm_m[i]->elem);
         }
     }
     
@@ -425,7 +427,7 @@ public:
         return size;
     }
     
-    element** get_m() const  {
+    element* const* get_m() const {
         return m;
     }
     

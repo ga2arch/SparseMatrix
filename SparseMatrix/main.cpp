@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Gabriele Carrettoni. All rights reserved.
 //
 
-
 #include "SparseMatrix.h"
 
 void test_add_primitive() {
@@ -231,7 +230,7 @@ int main(int argc, const char * argv[]) {
     std::cout << "\n=== TESTING EVALUATE: ===\n";
     test_evaluate_primitive();
     test_evaluate_complex();
-    
+
     std::cout << "\n=== TESTING CONVERSION: ===\n";
     test_conversion_primite_to_primitve();
     test_conversion_primite_to_complex();
