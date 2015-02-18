@@ -226,13 +226,18 @@ public:
     };
     
     /**
+     Constructor of empty matrix
+     */
+    SparseMatrix(): rows(0), cols(0), size(0), m(NULL) {};
+    
+    /**
      Constructor
      @param r the number of rows
      @param c the number of coloumns
      @param d the default element to return when the user tries to retrieve an
      element not existent in the matrix.
      */
-    explicit SparseMatrix(int r, int c, T d): rows(r), cols(c), def(d), size(0), m(NULL) {}
+    SparseMatrix(int r, int c, T d): rows(r), cols(c), def(d), size(0), m(NULL) {}
     
     /**
      Copy constructor
@@ -273,6 +278,21 @@ public:
                                sm_m[i]->k,
                                sm_m[i]->elem);
         }
+    }
+    
+    /**
+     Copy constructor
+     */
+    SparseMatrix operator=(SparseMatrix& sm) {
+        rows = sm.get_rows();
+        cols = sm.get_cols();
+        
+        def  = sm.get_def();
+        size = sm.get_size();
+        
+        m = sm.get_();
+        
+        return *this;
     }
     
     /**
