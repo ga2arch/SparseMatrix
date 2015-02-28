@@ -283,14 +283,18 @@ public:
     /**
      Copy constructor
      */
-    SparseMatrix operator=(SparseMatrix& sm) {
-        rows = sm.get_rows();
-        cols = sm.get_cols();
+    SparseMatrix operator=(const SparseMatrix& sm) {
+        rows = sm.rows;
+        cols = sm.cols;
         
-        def  = sm.get_def();
-        size = sm.get_size();
+        def  = sm.def;
+        size = sm.size;
         
-        m = sm.get_();
+        m = new element*[size]();
+        
+        for (int i=0; i < size; i++) {
+            m[i] = new element(sm.m[i]->j, sm.m[i]->k, sm.m[i]->elem);
+        }
         
         return *this;
     }
